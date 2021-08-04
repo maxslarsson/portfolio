@@ -1,0 +1,8 @@
+# Svelte Defaults
+.DS_Store
+node_modules
+/.svelte-kit
+/package
+
+# WebStorm Configuration
+.idea
