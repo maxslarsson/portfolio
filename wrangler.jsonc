@@ -4,6 +4,13 @@
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "portfolio",
 	"main": "@astrojs/cloudflare/entrypoints/server",
+
+	"routes": [
+		{ "pattern": "maxlarsson.dev", "custom_domain": true }
+	],
+	"workers_dev": false,
+	"preview_urls": true,
+
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",
