@@ -10,6 +10,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://maxlarsson.dev',
 
+  session: false,
   adapter: cloudflare(),
 
   cache: {
