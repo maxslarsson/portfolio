@@ -1,0 +1,25 @@
+---
+import ArrowCard from "@/components/ArrowCard.astro"
+import Container from "@/components/Container.astro"
+import PageLayout from "@/layouts/PageLayout.astro"
+import { getProjects } from "@/lib/projects"
+
+const projects = await getProjects()
+const description = "Recent projects I have worked on."
+---
+
+<PageLayout title="Projects" description={description}>
+  <Container class="pt-36 pb-16">
+    <div class="motion-safe:animate-fade-up">
+      <h1 class="mt-2 text-3xl font-semibold text-white">Projects</h1>
+      <p class="mt-1">{description}</p>
+    </div>
+    <ul class="mt-10 space-y-4 motion-safe:animate-fade-up" style="--i: 1">
+      {projects.map((project) => (
+        <li>
+          <ArrowCard project={project} />
+        </li>
+      ))}
+    </ul>
+  </Container>
+</PageLayout>

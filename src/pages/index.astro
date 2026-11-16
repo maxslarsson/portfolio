@@ -1,11 +1,84 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import ArrowCard from "@/components/ArrowCard.astro"
+import Galaxy from "@/components/Galaxy.astro"
+import { SITE, SOCIALS } from "@/consts"
+import PageLayout from "@/layouts/PageLayout.astro"
+import { getProjects } from "@/lib/projects"
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const projects = (await getProjects()).slice(0, 3)
+const github = SOCIALS.find(({ name }) => name === "GitHub")!
+
+const linkClass =
+  "w-fit underline decoration-[.5px] underline-offset-2 transition text-white/75 decoration-white/50 hover:text-white hover:decoration-white"
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<PageLayout>
+  <Galaxy />
+
+  <section class="relative h-svh w-full">
+    <div class="absolute inset-0 top-1/4 overflow-hidden motion-safe:animate-fade-up">
+      <div class="absolute top-0 left-1/2 aspect-square min-h-svh w-[250vw] -translate-x-1/2 rounded-full bg-linear-to-b from-0% to-transparent to-5% p-px from-white/75">
+        <div class="flex size-full justify-center overflow-hidden rounded-full p-px bg-black">
+          <div class="h-20 w-full rounded-full blur-3xl bg-white/25"></div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center p-5 text-center motion-safe:animate-fade-up" style="--i: 1">
+      <div>
+        <p class="text-lg font-semibold opacity-75 md:text-xl lg:text-2xl">Hello, I am</p>
+        <h1 class="text-2xl font-bold uppercase md:text-3xl lg:text-4xl text-white">{SITE.title}</h1>
+        <p class="text-sm opacity-75 md:text-base lg:text-lg">Software engineer.</p>
+        <div class="mt-5 flex flex-wrap justify-center gap-4 text-xs md:text-sm lg:text-base">
+          <a href="/projects" class="rounded-sm px-4 py-2 transition hover:opacity-75 bg-white text-black">
+            View my projects
+          </a>
+          <a href={github.href} target="_blank" class="rounded-sm border px-4 py-2 transition border-white/25 hover:bg-white/15">
+            Find me on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="relative bg-black">
+    <div class="mx-auto max-w-(--breakpoint-sm) space-y-24 p-5 pb-16">
+      <section class="motion-safe:animate-fade-up" style="--i: 2">
+        <!-- TODO: write your own intro -->
+        <article class="prose max-w-none prose-invert">
+          <p>I am a <b><i>software engineer</i></b>. Placeholder intro: who you are, what you build, and what you care about.</p>
+          <p>Now</p>
+          <p>What you are currently working on.</p>
+        </article>
+      </section>
+
+      <section class="space-y-4 motion-safe:animate-fade-up" style="--i: 3">
+        <div class="flex justify-between">
+          <h2 class="font-semibold text-white">Recent projects</h2>
+          <a href="/projects" class={linkClass}>All projects</a>
+        </div>
+        <ul class="space-y-4">
+          {projects.map((project) => (
+            <li>
+              <ArrowCard project={project} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="motion-safe:animate-fade-up" style="--i: 4">
+        <h2 class="font-semibold text-white">Let's Connect</h2>
+        <p>Find me on GitHub and LinkedIn.</p>
+        <dl class="mt-4 grid grid-cols-[auto_1fr] gap-x-8 gap-y-2">
+          {SOCIALS.map(({ name, text, href }) => (
+            <>
+              <dt>{name}</dt>
+              <dd class="truncate">
+                <a href={href} target="_blank" class={linkClass}>{text}</a>
+              </dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    </div>
+  </div>
+</PageLayout>

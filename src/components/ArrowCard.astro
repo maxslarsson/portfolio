@@ -1,0 +1,30 @@
+---
+import Arrow from "@/components/Arrow.astro"
+import type { CollectionEntry } from "astro:content"
+import { formatDate } from "@/lib/utils"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { id, data } = Astro.props.project
+---
+
+<a
+  href={`/projects/${id}`}
+  class="group flex items-center gap-3 rounded-lg border p-4 transition-colors border-white/20 hover:bg-white/10 hover:text-white"
+>
+  <div class="w-full">
+    <div class="text-sm uppercase">{formatDate(data.date)}</div>
+    <div class="mt-3 line-clamp-2 font-semibold text-white">{data.title}</div>
+    <div class="line-clamp-2 text-sm">{data.summary}</div>
+    <ul class="mt-2 flex flex-wrap gap-1">
+      {data.tags.map((tag) => (
+        <li class="max-w-40 truncate rounded-sm px-2 py-0.5 text-xs uppercase bg-white/20 text-white/75">
+          {tag}
+        </li>
+      ))}
+    </ul>
+  </div>
+  <Arrow />
+</a>

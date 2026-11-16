@@ -1,2 +1,51 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+
+  /* makes bare `transition*` utilities match the site's 300ms ease-in-out feel */
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: ease-in-out;
+
+  /* staggered by setting --i on each element */
+  --animate-fade-up: fade-up 1s ease calc(var(--i, 0) * 150ms) both;
+  --animate-twinkle: twinkle 2s ease-in-out forwards;
+  --animate-meteor: meteor 3s ease-in-out forwards;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+  }
+
+  @keyframes twinkle {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: rotate(180deg);
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes meteor {
+    0% {
+      opacity: 0;
+      transform: translateY(200%);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+  }
+}

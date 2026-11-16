@@ -1,0 +1,79 @@
+---
+import type { InferGetStaticPropsType } from "astro"
+import { render } from "astro:content"
+import Arrow from "@/components/Arrow.astro"
+import Container from "@/components/Container.astro"
+import BookOpen from "@/icons/book-open.svg"
+import Calendar from "@/icons/calendar.svg"
+import Globe from "@/icons/globe.svg"
+import Link from "@/icons/link.svg"
+import PageLayout from "@/layouts/PageLayout.astro"
+import { getProjects } from "@/lib/projects"
+import { formatDate, readingTime } from "@/lib/utils"
+
+export async function getStaticPaths() {
+  const projects = await getProjects()
+  // prev/next wrap around, so a single project links to itself
+  return projects.map((project, i) => ({
+    params: { id: project.id },
+    props: { project, prev: projects.at(i - 1)!, next: projects[(i + 1) % projects.length] },
+  }))
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { project, prev, next } = Astro.props
+const { title, summary, date, demoUrl, repoUrl } = project.data
+const { Content } = await render(project)
+
+const outlineButton =
+  "group flex items-center gap-2 rounded-sm border px-3 py-1.5 text-xs transition md:text-sm lg:text-base border-white/25 hover:bg-white/15 hover:text-white"
+const navCard =
+  "group flex items-center gap-3 rounded-lg border p-4 transition border-white/20 hover:bg-white/10 hover:text-white"
+---
+
+<PageLayout title={title} description={summary}>
+  <Container class="pt-36 pb-5 motion-safe:animate-fade-up">
+    <a
+      href="/projects"
+      class="group flex w-fit items-center gap-1.5 rounded-sm border p-1.5 text-sm transition-colors border-white/20 hover:bg-white/10 hover:text-white"
+    >
+      <Arrow class="rotate-180" />
+      Back to projects
+    </a>
+    <div class="mt-12 flex flex-wrap gap-3 text-sm uppercase opacity-75">
+      <span class="flex items-center gap-2"><Calendar class="size-5" />{formatDate(date)}</span>
+      <span class="flex items-center gap-2"><BookOpen class="size-5" />{readingTime(project.body)}</span>
+    </div>
+    <h1 class="mt-2 text-3xl font-semibold text-white">{title}</h1>
+    <p class="mt-1">{summary}</p>
+    {(demoUrl || repoUrl) && (
+      <div class="mt-4 flex flex-wrap gap-2">
+        {demoUrl && <a href={demoUrl} target="_blank" class={outlineButton}><Globe class="size-4" />See Demo</a>}
+        {repoUrl && <a href={repoUrl} target="_blank" class={outlineButton}><Link class="size-4" />See Repository</a>}
+      </div>
+    )}
+  </Container>
+
+  <Container class="flex-1 py-5 motion-safe:animate-fade-up" style="--i: 1">
+    <article class="prose max-w-none pb-12 prose-invert">
+      <Content />
+    </article>
+    <nav class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <a href={`/projects/${prev.id}`} class={navCard}>
+        <Arrow class="rotate-180" />
+        <div>
+          <div class="text-sm uppercase">Prev</div>
+          <div class="mt-3 font-semibold text-white">{prev.data.title}</div>
+        </div>
+      </a>
+      <a href={`/projects/${next.id}`} class:list={[navCard, "justify-between text-right"]}>
+        <div>
+          <div class="text-sm uppercase">Next</div>
+          <div class="mt-3 font-semibold text-white">{next.data.title}</div>
+        </div>
+        <Arrow />
+      </a>
+    </nav>
+  </Container>
+</PageLayout>

@@ -1,0 +1,70 @@
+---
+// Home page backdrop: static stars plus spawned twinkles and meteors.
+const showers = ["rotate-45", "rotate-135", "rotate-225", "rotate-315"]
+---
+
+<div class="fixed inset-0">
+  <div data-dots="1000" class="absolute top-0 left-0 size-px rounded-full"></div>
+  <div data-dots="500" class="absolute top-0 left-0 size-[1.5px] rounded-full"></div>
+  <div data-dots="250" class="absolute top-0 left-0 size-[2px] rounded-full"></div>
+  <div id="twinkles"></div>
+  {showers.map((rotate) => <div data-shower class:list={["absolute top-0 left-1/2 aspect-square w-screen -translate-x-1/2", rotate]} />)}
+</div>
+
+<template id="twinkle-template">
+  <svg viewBox="0 0 149 149" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute animate-twinkle">
+    <circle cx="74" cy="74" r="11" fill="white" />
+    <rect y="141.421" width="200" height="10" transform="rotate(-45 0 141.421)" fill="url(#twinkle-a)" />
+    <rect x="7.07107" width="200" height="10" transform="rotate(45 7.07107 0)" fill="url(#twinkle-b)" />
+    <defs>
+      <linearGradient id="twinkle-a" x1="0" y1="146.421" x2="200" y2="146.421" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#1E1E1E" />
+        <stop offset="0.445" stop-color="white" />
+        <stop offset="0.58721" stop-color="white" />
+        <stop offset="1" stop-color="#1E1E1E" />
+      </linearGradient>
+      <linearGradient id="twinkle-b" x1="7.07107" y1="5" x2="207.071" y2="5" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#1E1E1E" />
+        <stop offset="0.42" stop-color="white" />
+        <stop offset="0.555" stop-color="white" />
+        <stop offset="1" stop-color="#1E1E1E" />
+      </linearGradient>
+    </defs>
+  </svg>
+</template>
+
+<script>
+  const random = (max: number) => Math.floor(Math.random() * max)
+
+  // Each dot layer is one element whose box-shadow paints every dot.
+  for (const layer of document.querySelectorAll<HTMLElement>("[data-dots]")) {
+    layer.style.boxShadow = Array.from({ length: Number(layer.dataset.dots) }, () => `${random(2560)}px ${random(2560)}px white`).join()
+  }
+
+  const twinkles = document.getElementById("twinkles")!
+  const twinkleTemplate = document.querySelector<HTMLTemplateElement>("#twinkle-template")!
+  const showers = document.querySelectorAll("[data-shower]")
+
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)")
+
+  function spawn(parent: Element, element: HTMLElement | SVGElement, style: Partial<CSSStyleDeclaration>) {
+    Object.assign(element.style, style)
+    element.addEventListener("animationend", () => element.remove())
+    parent.append(element)
+  }
+
+  setInterval(() => {
+    if (reducedMotion.matches) return
+    const star = twinkleTemplate.content.firstElementChild!.cloneNode(true) as SVGElement
+    const minSize = innerWidth < 768 ? 7.5 : 15
+    const size = `${minSize + Math.random() * minSize}px`
+    spawn(twinkles, star, { left: `${random(innerWidth)}px`, top: `${random(innerHeight / 3)}px`, width: size, height: size })
+  }, 5000)
+
+  setInterval(() => {
+    if (reducedMotion.matches) return
+    const meteor = document.createElement("div")
+    meteor.className = "absolute h-[75vh] w-px animate-meteor bg-linear-to-b from-white to-transparent"
+    spawn(showers[random(showers.length)], meteor, { left: `${random(innerWidth)}px`, top: `${random(innerHeight)}px` })
+  }, 1500)
+</script>

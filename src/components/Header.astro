@@ -1,0 +1,82 @@
+---
+import Container from "@/components/Container.astro"
+import { LINKS } from "@/consts"
+import Menu from "@/icons/menu.svg"
+import X from "@/icons/x.svg"
+
+const { pathname } = Astro.url
+const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
+---
+
+<header
+  id="header"
+  class="fixed top-0 z-50 h-16 w-full border-b border-transparent transition data-scrolled:backdrop-blur-xs data-scrolled:backdrop-saturate-200 data-scrolled:border-white/25 data-scrolled:bg-black/50"
+>
+  <Container class="grid h-full grid-cols-[1fr_auto_1fr] items-center">
+    <nav class="col-start-2 hidden items-center gap-1 text-sm md:flex">
+      {LINKS.map(({ text, href }) => (
+        <a
+          href={href}
+          aria-current={isCurrent(href) ? "page" : undefined}
+          class:list={[
+            "flex h-8 items-center rounded-full px-3 transition-colors",
+            isCurrent(href)
+              ? "bg-white text-black"
+              : "hover:bg-white/20 hover:text-white",
+          ]}
+        >
+          {text}
+        </a>
+      ))}
+    </nav>
+
+    <!-- explicit col-start keeps the button right; the nav is display:none on mobile and frees up its column -->
+    <button
+      id="drawer-button"
+      aria-controls="drawer"
+      aria-expanded="false"
+      aria-label="Toggle menu"
+      class="group col-start-3 flex size-9 items-center justify-center justify-self-end rounded-full border border-white/25 p-2 transition-colors hover:bg-white/20 hover:text-white md:hidden"
+    >
+      <Menu class="size-full group-aria-expanded:hidden" />
+      <X class="hidden size-full group-aria-expanded:block" />
+    </button>
+  </Container>
+</header>
+
+<!-- Must stay outside <header>: the header's backdrop-filter would become the containing block for this fixed element. -->
+<div
+  id="drawer"
+  class="fixed inset-0 z-40 flex h-0 flex-col items-center justify-center overflow-hidden transition-[height] data-open:h-full md:hidden bg-neutral-900"
+>
+  <nav class="flex flex-col items-center gap-2">
+    {LINKS.map(({ text, href }) => (
+      <a
+        href={href}
+        aria-current={isCurrent(href) ? "page" : undefined}
+        class:list={[
+          "rounded-full px-3 py-1 transition-colors",
+          isCurrent(href)
+            ? "pointer-events-none bg-white text-black"
+            : "hover:bg-white/20 hover:text-white",
+        ]}
+      >
+        {text}
+      </a>
+    ))}
+  </nav>
+</div>
+
+<script>
+  const header = document.getElementById("header")!
+  const drawer = document.getElementById("drawer")!
+  const drawerButton = document.getElementById("drawer-button")!
+
+  const onScroll = () => header.toggleAttribute("data-scrolled", scrollY > 0)
+  addEventListener("scroll", onScroll, { passive: true })
+  onScroll()
+
+  drawerButton.addEventListener("click", () => {
+    drawerButton.ariaExpanded = String(drawer.toggleAttribute("data-open"))
+  })
+</script>
