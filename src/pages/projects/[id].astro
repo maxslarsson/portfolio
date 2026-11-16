@@ -48,9 +48,9 @@ const navCard =
     <h1 class="mt-2 text-3xl font-semibold text-white">{title}</h1>
     <p class="mt-1">{summary}</p>
     {(demoUrl || repoUrl) && (
-      <div class="mt-4 flex flex-wrap gap-2">
-        {demoUrl && <a href={demoUrl} target="_blank" class={outlineButton}><Globe class="size-4" />See Demo</a>}
-        {repoUrl && <a href={repoUrl} target="_blank" class={outlineButton}><Link class="size-4" />See Repository</a>}
+      <div data-project-id={project.id} class="mt-4 flex flex-wrap gap-2">
+        {demoUrl && <a href={demoUrl} target="_blank" data-event="project_demo_clicked" class={outlineButton}><Globe class="size-4" />See Demo</a>}
+        {repoUrl && <a href={repoUrl} target="_blank" data-event="project_repository_clicked" class={outlineButton}><Link class="size-4" />See Repository</a>}
       </div>
     )}
   </Container>
@@ -77,3 +77,19 @@ const navCard =
     </nav>
   </Container>
 </PageLayout>
+
+<script>
+  import posthog from "posthog-js"
+
+  const projectLinks = document.querySelector<HTMLElement>("[data-project-id]")
+  const projectId = projectLinks?.dataset.projectId
+
+  projectLinks?.querySelectorAll<HTMLAnchorElement>("[data-event]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const event = link.dataset.event
+      if (!projectId || !event) return
+
+      posthog.capture(event, { project_id: projectId })
+    })
+  })
+</script>

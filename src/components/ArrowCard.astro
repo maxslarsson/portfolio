@@ -12,6 +12,8 @@ const { id, data } = Astro.props.project
 
 <a
   href={`/projects/${id}`}
+  data-project-card
+  data-project-id={id}
   class="group flex items-center gap-3 rounded-lg border p-4 transition-colors border-white/20 hover:bg-white/10 hover:text-white"
 >
   <div class="w-full">
@@ -28,3 +30,16 @@ const { id, data } = Astro.props.project
   </div>
   <Arrow />
 </a>
+
+<script>
+  import posthog from "posthog-js"
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-project-card]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const projectId = link.dataset.projectId
+      if (!projectId) return
+
+      posthog.capture("project_selected", { project_id: projectId })
+    })
+  })
+</script>

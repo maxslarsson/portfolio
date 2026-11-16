@@ -100,6 +100,8 @@ const linkClass =
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               aria-label={name}
+              data-contact-link
+              data-contact-method={name}
               class="size-10 rounded-full p-2 transition hover:bg-white/20 hover:text-white"
             >
               <Icon class="size-full" />
@@ -110,3 +112,16 @@ const linkClass =
     </div>
   </div>
 </PageLayout>
+
+<script>
+  import posthog from "posthog-js"
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-contact-link]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const contactMethod = link.dataset.contactMethod
+      if (!contactMethod) return
+
+      posthog.capture("contact_link_clicked", { contact_method: contactMethod })
+    })
+  })
+</script>
