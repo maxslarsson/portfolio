@@ -1,3 +1,4 @@
+import Envelope from "@/icons/envelope.svg"
 import GitHub from "@/icons/github.svg"
 import LinkedIn from "@/icons/linkedin.svg"
 
@@ -12,6 +13,7 @@ export const LINKS = [
 ]
 
 export const SOCIALS = [
-  { name: "GitHub", icon: GitHub, text: "maxslarsson", href: "https://github.com/maxslarsson" },
-  { name: "LinkedIn", icon: LinkedIn, text: "maxslarsson", href: "https://www.linkedin.com/in/maxslarsson/" },
+  { name: "Email", icon: Envelope, href: "mailto:hi@maxlarsson.dev" },
+  { name: "LinkedIn", icon: LinkedIn, href: "https://www.linkedin.com/in/maxslarsson/" },
+  { name: "GitHub", icon: GitHub, href: "https://github.com/maxslarsson" },
 ]

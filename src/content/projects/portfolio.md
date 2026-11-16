@@ -1,16 +1,17 @@
 ---
 title: "Portfolio"
-summary: "This site. Placeholder project entry, replace with your own."
-date: 2026-11-16
+summary: "This site: a small static Astro site deployed to Cloudflare."
+date: 2026-10-21
 tags:
   - Astro
   - Tailwind
   - Cloudflare
-repoUrl: https://github.com/your-handle/portfolio
+demoUrl: https://maxlarsson.dev
+repoUrl: https://github.com/maxslarsson/portfolio
 ---
 
-Placeholder project write-up. Each Markdown file in `src/content/projects/` becomes a page at `/projects/<filename>`.
+This is the site you are reading. I wanted somewhere to write about projects at more length than a resume bullet allows, and I wanted it to load fast and stay easy to change.
 
-## Heading
+It is built with [Astro](https://astro.build) and styled with Tailwind. Every page is rendered to static HTML at build time and served from Cloudflare. Each project is a Markdown file in a content collection with a typed schema, which means adding one is a matter of writing a file and committing it. Images are resized and converted to WebP during the build.
 
-Body copy is styled by `@tailwindcss/typography`, so regular Markdown — lists, `code`, links, images — looks right out of the box.
+The development environment is a Nix flake, so the same Node and pnpm versions are available on any machine with one command.
