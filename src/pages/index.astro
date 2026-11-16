@@ -2,17 +2,11 @@
 import { Image } from "astro:assets"
 import { Icon } from "astro-icon/components"
 import headshot from "@/assets/headshot.png"
-import ArrowCard from "@/components/ArrowCard.astro"
 import Galaxy from "@/components/Galaxy.astro"
 import { SITE, SOCIALS } from "@/consts"
 import PageLayout from "@/layouts/PageLayout.astro"
-import { getProjects } from "@/lib/projects"
 
-const projects = (await getProjects()).slice(0, 3)
-const github = SOCIALS.find(({ name }) => name === "GitHub")!
 
-const linkClass =
-  "w-fit underline decoration-[.5px] underline-offset-2 transition text-white/75 decoration-white/50 hover:text-white hover:decoration-white"
 ---
 
 <PageLayout>
@@ -66,52 +60,22 @@ const linkClass =
         <p>Outside of work I play soccer, rock climb, grill, and watch Formula 1.</p>
       </article>
 
-      <div class="mt-8 flex flex-wrap gap-4 text-xs md:text-sm lg:text-base">
-        <a href="/projects" class="rounded-sm px-4 py-2 transition hover:opacity-75 bg-white text-black">
-          View my projects
-        </a>
-        <a href={github.href} target="_blank" class="rounded-sm border px-4 py-2 transition border-white/25 hover:bg-white/15">
-          Find me on GitHub
-        </a>
+      <div class="-ml-2 mt-6 flex flex-wrap gap-1">
+        {SOCIALS.map(({ name, icon, href }) => (
+          <a
+            href={href}
+            target={href.startsWith("http") ? "_blank" : undefined}
+            aria-label={name}
+            data-contact-link
+            data-contact-method={name}
+            class="size-10 rounded-full p-2 transition hover:bg-white/20 hover:text-white"
+          >
+            <Icon name={icon} class="size-full" />
+          </a>
+        ))}
       </div>
     </div>
   </section>
-
-  <div class="relative bg-black">
-    <div class="mx-auto max-w-(--breakpoint-sm) space-y-24 p-5 pb-16">
-      <section class="space-y-4 motion-safe:animate-fade-up" style="--i: 2">
-        <div class="flex justify-between">
-          <h2 class="font-semibold text-white">Recent projects</h2>
-          <a href="/projects" class={linkClass}>All projects</a>
-        </div>
-        <ul class="space-y-4">
-          {projects.map((project) => (
-            <li>
-              <ArrowCard project={project} />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="motion-safe:animate-fade-up" style="--i: 3">
-        <h2 class="font-semibold text-white">Let's Connect</h2>
-        <div class="mt-4 flex gap-1">
-          {SOCIALS.map(({ name, icon, href }) => (
-            <a
-              href={href}
-              target={href.startsWith("http") ? "_blank" : undefined}
-              aria-label={name}
-              data-contact-link
-              data-contact-method={name}
-              class="size-10 rounded-full p-2 transition hover:bg-white/20 hover:text-white"
-            >
-              <Icon name={icon} class="size-full" />
-            </a>
-          ))}
-        </div>
-      </section>
-    </div>
-  </div>
 </PageLayout>
 
 <script>
