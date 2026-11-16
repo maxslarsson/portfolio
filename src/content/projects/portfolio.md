@@ -16,6 +16,6 @@ It is built with [Astro](https://astro.build) and styled with Tailwind. Every pa
 
 The development environment is a Nix flake, so the same tools are available on any machine with one command. The flake does not pick versions itself. It reads the Node version from `.node-version`, and pnpm switches itself to the version in the `packageManager` field of `package.json`. CI reads the same two places, so there is one source of truth for each version and changing it changes it everywhere at once.
 
-CI is a GitHub Actions workflow that runs on every pull request and every push to `main`. It installs from the lockfile without allowing it to change, type-checks the site with `astro check`, and runs a full build. A new push cancels the run it replaces, and the workflow only has read access to the repository.
+CI is a GitHub Actions workflow that runs on every pull request and every push to `main`. It installs all dependencies from the lockfile, type-checks the entire site, and runs a full build.
 
 Dependencies are kept current by [Renovate](https://docs.renovatebot.com). Minor and patch updates are proposed once they have been out for a week, and merged automatically as soon as CI passes. Security fixes skip the wait. When a vulnerability alert comes in, the fix is proposed right away and merged as soon as CI passes. Major versions always wait for me.
