@@ -3,10 +3,7 @@ import type { InferGetStaticPropsType } from "astro"
 import { render } from "astro:content"
 import Arrow from "@/components/Arrow.astro"
 import Container from "@/components/Container.astro"
-import BookOpen from "@/icons/book-open.svg"
-import Calendar from "@/icons/calendar.svg"
-import Globe from "@/icons/globe.svg"
-import Link from "@/icons/link.svg"
+import { Icon } from "astro-icon/components"
 import PageLayout from "@/layouts/PageLayout.astro"
 import { getProjects } from "@/lib/projects"
 import { formatDate, readingTime } from "@/lib/utils"
@@ -41,16 +38,16 @@ const navCard =
       <Arrow class="rotate-180" />
       Back to projects
     </a>
-    <div class="mt-12 flex flex-wrap gap-3 text-sm uppercase opacity-75">
-      <span class="flex items-center gap-2"><Calendar class="size-5" />{formatDate(date)}</span>
-      <span class="flex items-center gap-2"><BookOpen class="size-5" />{readingTime(project.body)}</span>
+    <div class="mt-12 flex flex-wrap gap-x-5 gap-y-3 text-sm uppercase opacity-75">
+      <span class="flex items-center gap-2"><Icon name="akar-icons:calendar" class="size-5" />{formatDate(date)}</span>
+      <span class="flex items-center gap-2"><Icon name="akar-icons:book-open" class="size-5" />{readingTime(project.body)}</span>
     </div>
     <h1 class="mt-2 text-3xl font-semibold text-white">{title}</h1>
     <p class="mt-1">{summary}</p>
     {(demoUrl || repoUrl) && (
       <div data-project-id={project.id} class="mt-4 flex flex-wrap gap-2">
-        {demoUrl && <a href={demoUrl} target="_blank" data-event="project_demo_clicked" class={outlineButton}><Globe class="size-4" />See Demo</a>}
-        {repoUrl && <a href={repoUrl} target="_blank" data-event="project_repository_clicked" class={outlineButton}><Link class="size-4" />See Repository</a>}
+        {demoUrl && <a href={demoUrl} target="_blank" data-event="project_demo_clicked" class={outlineButton}><Icon name="akar-icons:globe" class="size-4" />See Demo</a>}
+        {repoUrl && <a href={repoUrl} target="_blank" data-event="project_repository_clicked" class={outlineButton}><Icon name="akar-icons:link-out" class="size-4" />See Repository</a>}
       </div>
     )}
   </Container>

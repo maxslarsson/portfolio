@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets"
+import { Icon } from "astro-icon/components"
 import headshot from "@/assets/headshot.png"
 import ArrowCard from "@/components/ArrowCard.astro"
 import Galaxy from "@/components/Galaxy.astro"
@@ -95,7 +96,7 @@ const linkClass =
       <section class="motion-safe:animate-fade-up" style="--i: 3">
         <h2 class="font-semibold text-white">Let's Connect</h2>
         <div class="mt-4 flex gap-1">
-          {SOCIALS.map(({ name, icon: Icon, href }) => (
+          {SOCIALS.map(({ name, icon, href }) => (
             <a
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
@@ -104,7 +105,7 @@ const linkClass =
               data-contact-method={name}
               class="size-10 rounded-full p-2 transition hover:bg-white/20 hover:text-white"
             >
-              <Icon class="size-full" />
+              <Icon name={icon} class="size-full" />
             </a>
           ))}
         </div>

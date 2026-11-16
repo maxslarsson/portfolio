@@ -1,8 +1,7 @@
 ---
 import Container from "@/components/Container.astro"
+import { Icon } from "astro-icon/components"
 import { LINKS } from "@/consts"
-import Menu from "@/icons/menu.svg"
-import X from "@/icons/x.svg"
 
 const { pathname } = Astro.url
 const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
@@ -38,8 +37,8 @@ const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.
       aria-label="Toggle menu"
       class="group col-start-3 flex size-9 items-center justify-center justify-self-end rounded-full border border-white/25 p-2 transition-colors hover:bg-white/20 hover:text-white md:hidden"
     >
-      <Menu class="size-full group-aria-expanded:hidden" />
-      <X class="hidden size-full group-aria-expanded:block" />
+      <Icon name="akar-icons:three-line-horizontal" class="size-full group-aria-expanded:hidden" />
+      <Icon name="akar-icons:cross" class="hidden size-full group-aria-expanded:block" />
     </button>
   </Container>
 </header>
