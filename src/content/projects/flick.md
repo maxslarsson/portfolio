@@ -7,11 +7,11 @@ tags:
   - LLVM
   - Compilers
   - Docker
-demoUrl: https://flick-lang.com/
+demoUrl: https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral
 repoUrl: https://github.com/flick-lang/flick
 ---
 
-Flick is a programming language that [Thomas Breydo](https://www.thomasbreydo.com/) and I started in April 2022 because we wanted to understand how compilers actually work. Reading about lexers and parsers only gets you so far, so we wrote our own language from scratch: the syntax, the type system, and a compiler in Rust that turns Flick source into a native executable. You can try it in the browser at [flick-lang.com](https://flick-lang.com/), and the compiler is open source at [github.com/flick-lang/flick](https://github.com/flick-lang/flick).
+Flick is a programming language that [Thomas Breydo](https://www.thomasbreydo.com/) and I started in April 2022 because we wanted to understand how compilers actually work. Reading about lexers and parsers only gets you so far, so we wrote our own language from scratch: the syntax, the type system, and a compiler in Rust that turns Flick source into a native executable. You can try it in the browser at [flick-lang.com](https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral), and the compiler is open source at [github.com/flick-lang/flick](https://github.com/flick-lang/flick).
 
 ![The Flick sandbox running a recursive Fibonacci program, with the output 1 1 2 3 5 8 13 in the console below the editor](../../assets/flick.png)
 
@@ -45,7 +45,7 @@ Splitting typing from code generation was the best structural decision in the pr
 
 ## The sandbox
 
-A language nobody can run is hard to show to anyone, so we built [flick-lang.com](https://flick-lang.com/).
+A language nobody can run is hard to show to anyone, so we built [flick-lang.com](https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral).
 
 Running a stranger's code on your own server is the interesting part. The frontend is a Next.js app that opens a WebSocket to a FastAPI backend on AWS EC2. The backend hands the source to a Docker container, which compiles it with the real Flick compiler and runs the resulting binary. The container has no network access and no access to the disk, each run is killed after five seconds, and the program is deleted afterwards. Output streams back over the WebSocket as the program runs.
 
