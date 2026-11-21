@@ -6,12 +6,12 @@ tags:
   - Rust
   - LLVM
   - Compilers
-  - Docker
-demoUrl: https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral
+  - Vercel
+demoUrl: https://flick-lang.com/
 repoUrl: https://github.com/flick-lang/flick
 ---
 
-Flick is a programming language that [Thomas Breydo](https://www.thomasbreydo.com/) and I started in April 2022 because we wanted to understand how compilers actually work. Reading about lexers and parsers only gets you so far, so we wrote our own language from scratch: the syntax, the type system, and a compiler in Rust that turns Flick source into a native executable. You can try it in the browser at [flick-lang.com](https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral), and the compiler is open source at [github.com/flick-lang/flick](https://github.com/flick-lang/flick).
+Flick is a programming language that [Thomas Breydo](https://www.thomasbreydo.com/) and I started in April 2022 because we wanted to understand how compilers actually work. Reading about lexers and parsers only gets you so far, so we wrote our own language from scratch: the syntax, the type system, and a compiler in Rust that turns Flick source into a native executable. You can try it in the browser at [flick-lang.com](https://flick-lang.com/), and the compiler is open source at [github.com/flick-lang/flick](https://github.com/flick-lang/flick).
 
 ![The Flick sandbox running a recursive Fibonacci program, with the output 0 1 1 2 3 5 8 13 in the console beside the editor](../../assets/flick.png)
 
@@ -45,9 +45,11 @@ Splitting typing from code generation was the best structural decision in the pr
 
 ## The sandbox
 
-A language nobody can run is hard to show to anyone, so we built [flick-lang.com](https://flick-lang.com/?utm_source=max_larsson_portfolio&utm_medium=referral).
+Running a stranger's code is the interesting part. Flick's `extern` declarations can call any C library function, so running someone's program is the same as handing them a shell. When we first built the sandbox in 2024, that meant hosting it ourselves: a Next.js frontend opened a WebSocket to a FastAPI backend on AWS EC2, which compiled each program in a Docker container with no network access, killed it after five seconds, and streamed the output back. It worked, but keeping that server patched and those containers locked down was our job, and a container shares its kernel with the host it runs on.
 
-Running a stranger's code on your own server is the interesting part. The frontend is a Next.js app that opens a WebSocket to a FastAPI backend on AWS EC2. The backend hands the source to a Docker container, which compiles it with the real Flick compiler and runs the resulting binary. The container has no network access and no access to the disk, each run is killed after five seconds, and the program is deleted afterwards. Output streams back over the WebSocket as the program runs.
+Since then, Vercel and Cloudflare have both started offering sandboxes that run each workload in its own microVM, so we handed the isolation to them and shut down the EC2 server. The site is now an Astro app on Vercel. The first time you press Run, a single server endpoint creates a [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox), a Firecracker microVM started from an image with the compiler in it, with no network access, one vCPU, and a two-minute limit. The browser then connects straight to the sandbox's terminal over a WebSocket, so our server never sits between the program and its output. Later runs in the same tab reuse the sandbox and start immediately, and it is deleted two minutes after the last one.
+
+The page itself got smaller too. We replaced the Monaco editor with CodeMirror, which is far lighter and is all a single-file playground needs. The console is now a real terminal built on xterm.js and connected to the program in both directions, so ANSI colors render properly and you can type into a running program, which the old output-only console could not do. The guessing game example on the site uses this: think of a number from 1 to 100 and answer each guess with higher or lower until it finds it.
 
 ## What I took from it
 
