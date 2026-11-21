@@ -29,7 +29,7 @@ Data reaches the browser over a WebSocket. Go services on the ground computer in
 
 ## Keeping commands behind the server
 
-![The admin login dialog, a single password field over the dimmed dashboard](../../assets/ground-password.png)
+<!-- ![The admin login dialog, a single password field over the dimmed dashboard](../../assets/ground-password.png) -->
 
 Anyone on the network could open the dashboard, and that was intended. Sending a command to a fuelled rocket needed to be a different matter, so the controls and conops pages sit behind an operator password.
 
